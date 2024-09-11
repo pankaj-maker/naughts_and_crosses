@@ -2,9 +2,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
-.box{
-    height: 300px;
-    width: 300px;
-    border: 1px solid black;
+body{
+    font-family: "DM sans",sans-serif;
+}
+button,input{
+font-family: inherit;
 }
