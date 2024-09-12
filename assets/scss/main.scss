@@ -43,6 +43,18 @@ main{
     right: -2rem;
     color: red;
 }
+.player-status{
+    border: 1px solid whitesmoke;
+    background-color: whitesmoke;
+    padding: 0.5rem 3rem;
+    border-radius: 1rem;
+}
+.current-player{
+    color: red;
+    font-weight: 500;
+    
+
+}
 .game{
     width: 100%;
     max-width: 20rem;
@@ -50,21 +62,27 @@ main{
     display: grid;
     border: 1px solid whitesmoke;
     grid-template-columns: repeat(3,1fr);
-    border-radius: 50px;
+    border-radius: 35px;
 background: #e0e0e0;
 box-shadow:  20px 20px 60px #bebebe,
              -20px -20px 60px #ffffff;
 }
 .box{
     border: 1px solid whitesmoke;
+    border-radius: 10px;
     width: 100%;
     aspect-ratio: 1/1;
     font-size: 2rem;
+    cursor: pointer;
     @extend %center
     
+}
+.box:nth-child(2n){
+    border: 1px solid whitesmoke;
 }
 .reset-btn{
     padding: 0.5rem 3rem;
     border-radius: 1rem;
     border: 1px solid whitesmoke;
+    cursor: pointer;
 }
