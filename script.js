@@ -1,56 +1,81 @@
+import winning from "./winning";
+
+const headingEl = document.querySelector(".heading");
 const currentPlayerEl = document.querySelector(".current-player");
-const gameGrid = document.querySelectorAll(".box");
+const boxesEl = document.querySelectorAll(".box");
 const resetBtnEl = document.querySelector(".reset-btn");
-const gameGridd = document.querySelector(".game");
 
-resetBtnEl.classList.add("active");
-// resetBtnEl.addEventListener("click",()=>{
-//     resetBtnEl.classList.remove("active")
-// });
+const player = ["O", "X"];
+let cuurPlayer;
+let gameGrid;
 
-const color = ["red", "green", "blue", "yellow", "black"];
-function handleClick() {
-//  const rn = Math.floor(Math.random() * color.length);
-  gameGridd.style.background = randomHex();
+function randomPlayer() {
+  const newPlayer = Math.floor(Math.random() * 2);
+  cuurPlayer = player[newPlayer];
 }
-resetBtnEl.addEventListener("click", handleClick);
+function swapPlayer() {
+  const newPlayer = cuurPlayer === player[0] ? player[1] : player[0];
+  cuurPlayer = newPlayer;
+}
 
-// function handleClick(el) {
-//   el.textContent = currentPlayer;
-//   swapPlayer();
-// }
+function startGame() {
+  gameGrid = new Array(9).fill("");
+  resetBtnEl.classList.remove("active");
+  randomPlayer();
+  currentPlayerEl.textContent = cuurPlayer;
+}
+startGame();
+function checkWinner() {
+  winning.forEach((chance) => {
+    const [c1, c2, c3] = chance;
+    if (
+      gameGrid[c1] &&
+      gameGrid[c2] &&
+      gameGrid[c3] &&
+      gameGrid[c1] === gameGrid[c2] &&
+      gameGrid[c2] === gameGrid[c3]
+    ) {
+      boxesEl.forEach((box) => (box.style.pointerEvents = "none"));
+      resetBtnEl.classList.add("active");
+      boxesEl[c1].classList.add("green");
+      boxesEl[c2].classList.add("green");
+      boxesEl[c3].classList.add("green");
 
-function randomHex() {
-    const char="0123456789abcdef";
-    let hex="#"
-    for (let  i= 0; i < 6; i++) {
-    const randomchar=char[Math.floor(Math.random()*char.length)];
-    hex += randomchar
+      headingEl.textContent = `${gameGrid[c1]} won!`;
+      currentPlayerEl.textContent = `${gameGrid[c1]}won!`;
     }
-    return hex
+   
+  });
+
+  const x = gameGrid.every((el) => el !== "");
+  if (x && !headingEl.textContent.includes("won")) {
+    headingEl.textContent = "Match Draw";
+    resetBtnEl.classList.add("active");
+  }
 }
 
-gameGrid.forEach((el) => {
-  el.addEventListener("click", () => {
-    handleClick(el);
+function handleClick(index) {
+  if (gameGrid[index] === "") {
+    boxesEl[index].textContent = cuurPlayer;
+    boxesEl[index].style.pointerEvents = "none";
+    gameGrid[index] = cuurPlayer;
+    checkWinner();
+    currentPlayerEl.textContent = cuurPlayer;
+    swapPlayer();
+  }
+}
+boxesEl.forEach((box, index) => {
+  box.addEventListener("click", () => {
+    handleClick(index);
   });
 });
 
-const player = ["O", "X"];
-let currentPlayer;
-
-const randomPlayer = function () {
-  const randomNo = Math.floor(Math.random() * 2);
-  currentPlayer = player[randomNo];
-};
-randomPlayer();
-currentPlayerEl.textContent = currentPlayer;
-console.log(currentPlayer);
-
-const swapPlayer = () => {
-  if (currentPlayer === "X") {
-    currentPlayer = "O";
-  } else {
-    currentPlayer = "X";
-  }
-};
+resetBtnEl.addEventListener("click", () => {
+  startGame();
+  headingEl.textContent = "Noughts & Crosses";
+  boxesEl.forEach((box) => {
+    box.classList.remove("green");
+    box.textContent = "";
+    box.style.pointerEvents = "auto";
+  });
+});
